@@ -36,11 +36,15 @@ PORT=<PORT NUMBER>
 ```
 
 ## Development
+After `npm install` in both `frontend/` and `backend/`
+
 To run the project;
 - `npm run dev` in `frontend/`
 - `npm run dev` in `backend/`
 
 ## Deployment
+After `npm install` in both `frontend/` and `backend/`
+
 To build the project;
 - `npm run build` in `frontend/`
 
