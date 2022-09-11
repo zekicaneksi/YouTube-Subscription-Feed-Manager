@@ -1,6 +1,8 @@
 # YouTube-Subscription-Feed-Manager
 A site that ables you to filter and see better your subscription feed.
 
+
+### Note
 The frontend and backend are de-coupled (separate apps) but are meant to be used with a single origin. Cookies must be configured to allow CORS if the client will be hosted on a second origin.
 
 ## Environment Variables
