@@ -85,6 +85,15 @@ app.get('/logout', checkAuthenticated, async (req, res) => {
   return res.status(500).send();
 });
 
+
+app.get('/getUserInfo', checkAuthenticated, async (req, res) => {
+  let toSend = {
+    name: req.user._json.name,
+    picture: req.user._json.picture
+  };
+  return res.status(200).send(JSON.stringify(toSend));
+});
+
 app.get('/getAcessToken', checkAuthenticated, async (req,res) => {
   let toReturn='';
   await Axios
