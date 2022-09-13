@@ -107,7 +107,7 @@ app.get('/getAcessToken', checkAuthenticated, async (req,res) => {
     toReturn = res.data.access_token;
   })
   .catch(error => {
-    console.log(error);
+    toReturn = 'error';
   });
   return res.send(JSON.stringify(toReturn));
 });

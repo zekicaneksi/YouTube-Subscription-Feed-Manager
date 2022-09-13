@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/page_index.module.css';
 import Navbar from '../components/Navbar.js';
+import { getAccessToken, renewAccessToken } from '../lib/accessToken';
 
 export default function Home() {
 
@@ -27,11 +28,23 @@ export default function Home() {
     return (<p>Loading...</p>);
   }
 
+  async function get(){
+    let test = await getAccessToken();
+    console.log(test);
+}
+
+async function set(){
+    let test =await renewAccessToken();
+    console.log(test);
+}
+
   return (
     <>
       <div className={styles.container}>
         <Navbar />
         <p>Hello</p>
+        <button onClick={get}>GetToken</button>
+        <button onClick={set}>renewToken</button>
       </div>
     </>
   )
