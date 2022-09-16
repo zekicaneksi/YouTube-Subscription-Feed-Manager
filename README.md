@@ -60,7 +60,8 @@ https://github.com/zekicaneksi/Passportjs-GoogleAuth2.0-With-API-call-from-front
 
 ##### Changing Session Storage
 Currently `passportjs` uses `express-session` and `express-session` uses `connect-redis` for storage. <br>
-To change the session storage, delete the `redis store set up` section from `backend/index.js` and set up then provide the desired storage to the session middleware. A list of compatible storages is provided in `express-session`'s npm page.
+To change the session storage, delete the `redis store set up` section from `backend/index.js` and set up then provide the desired storage to the session middleware. A list of compatible storages is provided in `express-session`'s npm page.<br>
+Also, delete the `REDIS_CONNECTION_STRING` variable in backend's environment files
 
 ## Setting Up The Project
 - `npm install` in both `frontend/` and `backend/`
