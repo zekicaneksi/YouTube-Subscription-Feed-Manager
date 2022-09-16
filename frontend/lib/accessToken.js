@@ -23,8 +23,8 @@ export async function renewAccessToken(){
                 if(errorCount === 3){
                     logout();
                 }
-            }
-            accessToken=data
+            } else errorCount = 0;
+            accessToken=data;
         });
     });
     return accessToken;
