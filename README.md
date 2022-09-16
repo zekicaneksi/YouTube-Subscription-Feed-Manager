@@ -65,7 +65,7 @@ To change the session storage, delete the `redis store set up` section from `bac
 ## Setting Up The Project
 - `npm install` in both `frontend/` and `backend/`
 - Create environment files as stated in [Environment Variables](#environment-variables)
-- start Redis server (for session storage, check [HERE](#changing-session-storage) to change the storage)
+- start Redis server (for session storage, if you wish to change the storage check [HERE](#changing-session-storage))
 
 ## Development
 To run the project;
