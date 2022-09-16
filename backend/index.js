@@ -4,6 +4,8 @@ import express from 'express';
 import Axios from 'Axios';
 import passport from 'passport';
 import session from 'express-session';
+import connectRedis from 'connect-redis';
+import { createClient } from 'redis';
 import googleAuth from 'passport-google-oauth20';
 import * as dotenv from 'dotenv';
 
@@ -12,6 +14,15 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, `.env.${process.env.NODE_ENV}`) });
 
 const app = express();
+
+/* redis store set up */
+let RedisStore = connectRedis(session);
+let redisClient = createClient({
+	url: process.env.REDIS_CONNECTION_STRING,
+  legacyMode: true
+});
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+await redisClient.connect();
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
@@ -22,9 +33,10 @@ app.use(function(req, res, next) {
 });
 
 app.use(session({
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SECRET,
   resave: false ,
-  saveUninitialized: true ,
+  saveUninitialized: true
 }));
 
 app.use(passport.initialize());
