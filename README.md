@@ -28,6 +28,7 @@ NEXT_PUBLIC_BACKEND_ADDRESS="<BACKEND_ADRESS>" --- example "http://localhost:200
 - `.env.development` file with such variables must be created in `backend/`;
 ```
 PORT=<PORT NUMBER>
+REDIS_CONNECTION_STRING="<REDIS_CONNECTION_STRING>" --- example "redis://localhost:6379"
 SECRET="<SECRET>" --- Secret for sessions
 CLIENT_ID="<CLIENT_ID>" --- Google Project's Client ID
 CLIENT_SECRET="<CLIENT_SECRET>" --- Google Project's Client Secret
@@ -37,6 +38,7 @@ FRONTEND_ADDRESS="<FRONTEND_ADDRESS>" --- example "http://localhost:3000" --- to
 - `.env.production` file with such variables must be created in `backend/`;
 ```
 PORT=<PORT NUMBER>
+REDIS_CONNECTION_STRING="<REDIS_CONNECTION_STRING>" --- example "redis://localhost:6379"
 SECRET="<SECRET>" --- Secret for sessions
 CLIENT_ID="<CLIENT_ID>" --- Google Project's Client ID
 CLIENT_SECRET="<CLIENT_SECRET>" --- Google Project's Client Secret
@@ -44,6 +46,8 @@ CALLBACK_URL="<CALLBACK_URL>" --- Google Project's Authorized Redirect URI
 FRONTEND_ADDRESS="<FRONTEND_ADDRESS>" --- example "http://localhost:2000" --- to allow CORS
 ```
 #### NOTES
+
+##### Google Project Stuff
 The Google Project is required for OAuth2.0 Authentication and Authorization for YouTube API. So that we can access the user's YouTube data and display subscription lists, videos, etc.
 
 Also, make sure that your backend address (example: both http://localhost:3001 and http://localhost) is listed in your Google project's `Authorized JavaScript origins`.
@@ -54,16 +58,21 @@ https://developers.google.com/identity/protocols/oauth2
 I also have a minimalistic project that implements Google OAuth2.0 with Passportjs; <br>
 https://github.com/zekicaneksi/Passportjs-GoogleAuth2.0-With-API-call-from-front-end-example
 
-## Development
-After `npm install` in both `frontend/` and `backend/`
+##### Changing Session Storage
+Currently `passportjs` uses `express-session` and `express-session` uses `connect-redis` for storage. <br>
+To change the session storage, delete the `redis store set up` section from `backend/index.js` and set up then provide the desired storage to session the middleware. A list of compatible storages is provided in `express-session`'s npm page.
 
+## Setting Up The Project
+- `npm install` in both `frontend/` and `backend/`
+- Create environment files as stated in [Environment Variables](#environment-variables)
+- start Redis server (for session storage, check [HERE](#changing-session-storage) to change the storage)
+
+## Development
 To run the project;
 - `npm run dev` in `frontend/`
 - `npm run dev` in `backend/`
 
 ## Deployment
-After `npm install` in both `frontend/` and `backend/`
-
 To build the project;
 - `npm run build` in `frontend/`
 
