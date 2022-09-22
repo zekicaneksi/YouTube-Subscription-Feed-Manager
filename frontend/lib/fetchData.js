@@ -1,9 +1,10 @@
 import { getAccessToken, renewAccessToken } from "./accessToken";
 
+
 export async function getSubscriptionList(){
 
     let pageToken = null;
-    let toReturn = [];
+    let toReturn = new Array;
 
     async function getPageOfSubs(pageToken){
         let nextPageToken;
@@ -22,11 +23,25 @@ export async function getSubscriptionList(){
         }
         else {
             response = await response.json();
+            
             if(response.nextPageToken === undefined) nextPageToken = 'fin';
             else nextPageToken = response.nextPageToken;
+
+            console.log(JSON.stringify(toReturn, null, 2));
+
             for(let i in response.items){
-                toReturn.push(response.items[i].snippet.title);
+                let toPush = {};
+                toPush.title = response.items[i].snippet.title;
+                toPush.channelID = response.items[i].snippet.resourceId.channelId;
+                console.log('to Push--');
+                console.log(toPush);
+                toReturn.push(toPush);
             }
+
+            console.log('listgin array -- ');
+            console.log(JSON.stringify(toReturn, null, 2));
+            console.log('listing array end');
+
         }
 
         return nextPageToken;
@@ -37,7 +52,7 @@ export async function getSubscriptionList(){
         pageToken = await getPageOfSubs(pageToken);
         if(pageToken === undefined) { // Means something went wrong, start over
             pageToken = null;
-            toReturn = [];
+            toReturn = new Array;
         }
         else if (pageToken === 'fin') break;
     }

@@ -5,7 +5,7 @@ import { getAccessToken, renewAccessToken } from '../lib/accessToken';
 import { getSubscriptionList } from '../lib/fetchData.js';
 
 export default function Home() {
-
+  
   const [loading, setLoading] = useState(true);
 
   function checkAuthenticated() {
@@ -39,7 +39,7 @@ export default function Home() {
       <div className={styles.container}>
         <Navbar />
         <p>Hello</p>
-        <button onClick={getSubs}>Getsublist into console</button>
+        <button onClick={getSubs}>Getsublist into console (takes a few seconds)</button>
       </div>
     </>
   )
