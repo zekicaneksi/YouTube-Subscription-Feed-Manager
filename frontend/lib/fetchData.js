@@ -30,7 +30,7 @@ export async function getSubscriptionList(){
             console.log(JSON.stringify(toReturn, null, 2));
 
             for(let i in response.items){
-                let toPush = {};
+                let toPush = Object.create({});
                 toPush.title = response.items[i].snippet.title;
                 toPush.channelID = response.items[i].snippet.resourceId.channelId;
                 console.log('to Push--');
