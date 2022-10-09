@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/page_index.module.css';
 import Navbar from '../components/Navbar.js';
+import FilterBox from '../components/FilterBox';
 import { getAccessToken, renewAccessToken } from '../lib/accessToken';
 import { getSubscriptionList } from '../lib/fetchData.js';
 
 export default function Home() {
 
   const [loading, setLoading] = useState(true);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   function checkAuthenticated() {
     fetch(process.env.NEXT_PUBLIC_BACKEND_ADDRESS + '/checkAuthenticated', { mode: 'cors', credentials: 'include' })
@@ -38,8 +40,13 @@ export default function Home() {
     <>
       <div className={styles.container}>
         <Navbar />
-        <p>Hello</p>
-        <button onClick={getSubs}>Getsublist into console</button>
+        <div className={styles.contentContainer}>
+          <div className={styles.filterDivContainer + (filterLoading ? ' '+ styles.disabledDiv : '')}>
+            <FilterBox setFilterLoading={setFilterLoading}/>
+            <FilterBox setFilterLoading={setFilterLoading}/>
+          </div>
+          <div className={styles.videosDivContainer}></div>
+        </div>
       </div>
     </>
   )

@@ -1,0 +1,24 @@
+.filterBoxContainer{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column
+}
+
+.filterElementContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.elementListContainer{
+    overflow: auto;
+    flex:auto
+}
+
+.filterBoxButtonContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    
+}

@@ -1,9 +1,10 @@
 import { getAccessToken, renewAccessToken } from "./accessToken";
 
+
 export async function getSubscriptionList(){
 
     let pageToken = null;
-    let toReturn = [];
+    let toReturn = new Array;
 
     async function getPageOfSubs(pageToken){
         let nextPageToken;
@@ -24,9 +25,16 @@ export async function getSubscriptionList(){
             response = await response.json();
             if(response.nextPageToken === undefined) nextPageToken = 'fin';
             else nextPageToken = response.nextPageToken;
-            for(let i in response.items){
-                toReturn.push(response.items[i].snippet.title);
+
+            let channels = Object.values(response.items).map(({ snippet }) => ({
+                title: snippet.title,
+                channelID: snippet.resourceId.channelId
+            }));
+
+            for(let index in channels){
+                toReturn.push(channels[index]);
             }
+
         }
 
         return nextPageToken;
@@ -37,7 +45,7 @@ export async function getSubscriptionList(){
         pageToken = await getPageOfSubs(pageToken);
         if(pageToken === undefined) { // Means something went wrong, start over
             pageToken = null;
-            toReturn = [];
+            toReturn = new Array;
         }
         else if (pageToken === 'fin') break;
     }
