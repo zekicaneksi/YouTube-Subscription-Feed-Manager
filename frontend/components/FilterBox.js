@@ -12,28 +12,7 @@ function FilterElement (props){
 
 export default function FilterBox(props){
 
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState({uncheckedData: [], checkedData: []});
     const [searchText, setSearchText] = useState('');
-
-    async function getDummyData(){
-        let toReturn = [];
-        for(let i = 0; i < 50; i++){
-            let toPush = Object.create({});
-            toPush.value = "data" + i;
-            toPush.checked = false;
-            toReturn.push(toPush);
-        }
-        setLoading(false);
-        setData((before) => {
-            let after = {...before};
-            after.uncheckedData = toReturn;
-            return after;})
-    }
-
-    useEffect(() => {
-        getDummyData();
-    },[]);
 
     function inputTextOnChange(event){
         setSearchText(event.target.value);
@@ -54,14 +33,14 @@ export default function FilterBox(props){
         }
 
         if(data.checked){
-            setData((before) => {
+            props.setData((before) => {
                 let after = {};
                 after.checkedData = removeFromArray(before.checkedData);
                 after.uncheckedData = addToArray(before.uncheckedData);
                 return after;
             });
         } else {
-            setData((before) => {
+            props.setData((before) => {
                 let after = {};
                 after.uncheckedData = removeFromArray(before.uncheckedData);
                 after.checkedData = addToArray(before.checkedData);
@@ -85,11 +64,11 @@ export default function FilterBox(props){
 
         let toReturn = [];
 
-        toReturn.push(...data.checkedData.map((data) => {
+        toReturn.push(...props.data.checkedData.map((data) => {
             return(returnElement(data));
         }));
 
-        toReturn.push(...data.uncheckedData.map((data) => {
+        toReturn.push(...props.data.uncheckedData.map((data) => {
             if (data.value.search(searchText) != -1) {
                 return (returnElement(data));
             }
@@ -102,7 +81,7 @@ export default function FilterBox(props){
     function handleClearAll(){
         props.setFilterLoading(true);
 
-        setData((before) => {
+        props.setData((before) => {
             let after = {};
             let holdCheckedData = [...before.checkedData];
             holdCheckedData.forEach((element, index) => {
@@ -119,7 +98,7 @@ export default function FilterBox(props){
     function handleChooseAll(){
         props.setFilterLoading(true);
 
-        setData((before) => {
+        props.setData((before) => {
             let after = {};
             let holdUncheckedData = [...before.uncheckedData];
             holdUncheckedData.forEach((element, index) => {
@@ -137,7 +116,7 @@ export default function FilterBox(props){
         <div className={styles.filterBoxContainer}>
             <input type='text' onChange={inputTextOnChange}/>
             <div className={styles.elementListContainer}>
-                {(loading === true ? <p>loading...</p> : getFilterElementList())}
+                {(props.data.uncheckedData.length === 0 && props.data.checkedData.length === 0) ? <p>loading...</p> : getFilterElementList()}
             </div>
             <div className={styles.filterBoxButtonContainer}>
                 <button onClick={handleClearAll}>Clear All</button>
