@@ -19,7 +19,6 @@ export default function FilterBox(props){
     }
 
     function handleCheck(data){
-        props.setFilterLoading(true);
 
         function removeFromArray(array){
             return array.filter((value) => value.value != data.value);
@@ -48,7 +47,6 @@ export default function FilterBox(props){
             });
         }
         
-        props.setFilterLoading(false);
     }
 
     function getFilterElementList() {
@@ -79,7 +77,6 @@ export default function FilterBox(props){
     }
 
     function handleClearAll(){
-        props.setFilterLoading(true);
 
         props.setData((before) => {
             let after = {};
@@ -92,11 +89,9 @@ export default function FilterBox(props){
             return after;
         });
 
-        props.setFilterLoading(false);
     }
 
     function handleChooseAll(){
-        props.setFilterLoading(true);
 
         props.setData((before) => {
             let after = {};
@@ -109,7 +104,6 @@ export default function FilterBox(props){
             return after;
         });
 
-        props.setFilterLoading(false);
     }
 
     return(

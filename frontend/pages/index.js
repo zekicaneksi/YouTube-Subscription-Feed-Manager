@@ -2,14 +2,51 @@ import { useEffect, useState } from 'react';
 import styles from '../styles/page_index.module.css';
 import Navbar from '../components/Navbar.js';
 import FilterBox from '../components/FilterBox';
-import { getSubscriptionList } from '../lib/fetchData.js';
+import { getPageOfSubs } from '../lib/fetchData.js';
 
 export default function Home() {
 
   const [loading, setLoading] = useState(true);
-  const [filterLoading, setFilterLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(true);
   const [subsData, setSubsData] = useState({uncheckedData: [], checkedData: []});
   const [categoriesData, setCategoriesData] = useState({uncheckedData: [], checkedData: []});
+
+
+  async function getSubscriptionList() {
+    let values = [];
+    let response = {nextPageToken: null, values: new Array};
+
+    while (true) {
+      response = await getPageOfSubs(response.nextPageToken);
+      if (response.nextPageToken === undefined) { // Means something went wrong, start over
+        response.nextPageToken = null;
+      }
+      else {
+        // prepare the data for FilterBox
+        for (let i = 0; i < response.values.length; i++) {
+          response.values[i].value = response.values[i].title;
+          response.values[i].checked = false;
+          values.push(response.values[i]);
+        }
+        setSubsData((before) => {
+          let after = { ...before };
+          after.uncheckedData = values;
+          return after;
+        });
+      }
+      
+      if (response.nextPageToken === 'fin') break;
+    }
+
+    
+  }
+
+  async function getData(){
+    
+    await getSubscriptionList();
+    getDummyData2();
+    setFilterLoading(false);
+  }
 
   function checkAuthenticated() {
     fetch(process.env.NEXT_PUBLIC_BACKEND_ADDRESS + '/checkAuthenticated', { mode: 'cors', credentials: 'include' })
@@ -20,9 +57,7 @@ export default function Home() {
           });
         } else {
           setLoading(false);
-
-          getDummyData();
-          getDummyData2();
+          getData();
         }
       });
   }
@@ -33,22 +68,6 @@ export default function Home() {
 
   if (loading) {
     return (<p>Loading...</p>);
-  }
-
-  async function getDummyData() {
-    let toReturn = [];
-    for (let i = 0; i < 50; i++) {
-      let toPush = Object.create({});
-      toPush.value = "data" + i;
-      toPush.checked = false;
-      toReturn.push(toPush);
-    }
-
-    setSubsData((before) => {
-      let after = { ...before };
-      after.uncheckedData = toReturn;
-      return after;
-    });
   }
   
   async function getDummyData2() {
@@ -67,19 +86,14 @@ export default function Home() {
     });
   }
 
-  async function getSubs() {
-    let test = await getSubscriptionList();
-    console.log(test);
-  }
-
   return (
     <>
       <div className={styles.container}>
         <Navbar />
         <div className={styles.contentContainer}>
           <div className={styles.filterDivContainer + (filterLoading ? ' '+ styles.disabledDiv : '')}>
-            <FilterBox setFilterLoading={setFilterLoading} data={subsData} setData={setSubsData}/>
-            <FilterBox setFilterLoading={setFilterLoading} data={categoriesData} setData={setCategoriesData}/>
+            <FilterBox data={subsData} setData={setSubsData}/>
+            <FilterBox data={categoriesData} setData={setCategoriesData}/>
           </div>
           <div className={styles.videosDivContainer}></div>
         </div>
