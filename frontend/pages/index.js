@@ -38,12 +38,13 @@ export default function Home() {
       if (response.nextPageToken === 'fin') break;
     }
 
+    return values;
     
   }
 
   async function getData(){
     
-    await getSubscriptionList();
+    let subsList = await getSubscriptionList();
     getDummyData2();
     setFilterLoading(false);
   }
